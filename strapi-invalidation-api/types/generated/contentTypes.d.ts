@@ -392,6 +392,36 @@ export interface ApiExampleExample extends Schema.CollectionType {
   };
 }
 
+export interface ApiTokenBlacklistTokenBlacklist extends Schema.CollectionType {
+  collectionName: 'token_blacklists';
+  info: {
+    singularName: 'token-blacklist';
+    pluralName: 'token-blacklists';
+    displayName: 'token-blacklist';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    token: Attribute.Text;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::token-blacklist.token-blacklist',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::token-blacklist.token-blacklist',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -829,6 +859,7 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'api::example.example': ApiExampleExample;
+      'api::token-blacklist.token-blacklist': ApiTokenBlacklistTokenBlacklist;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;

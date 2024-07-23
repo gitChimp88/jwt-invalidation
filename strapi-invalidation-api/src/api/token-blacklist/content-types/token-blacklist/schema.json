@@ -1,0 +1,18 @@
+{
+  "kind": "collectionType",
+  "collectionName": "token_blacklists",
+  "info": {
+    "singularName": "token-blacklist",
+    "pluralName": "token-blacklists",
+    "displayName": "token-blacklist"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "token": {
+      "type": "text"
+    }
+  }
+}

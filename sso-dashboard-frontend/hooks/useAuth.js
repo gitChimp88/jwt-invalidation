@@ -61,13 +61,49 @@ const useAuth = () => {
     setIsAuthenticated(true);
   }, []);
 
-  const logout = useCallback(() => {
-    setIsAuthenticated(false);
-    setTokenState(null);
-    setUserInfoState(null);
-    clearAuthData();
-    router.push('/login');
-  }, [router]);
+  const blacklistToken = async (token) => {
+    const payload = {
+      data: {
+        token,
+      },
+    };
+
+    try {
+      const res = await fetch('http://localhost:1337/api/token-blacklists', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      });
+
+      if (!res.ok) {
+        throw new Error(`Failed to blacklist token: ${res.statusText}`);
+      }
+
+      return await res.json();
+    } catch (error) {
+      console.error('Error blacklisting token:', error);
+      throw error;
+    }
+  };
+
+  const logout = useCallback(async () => {
+    try {
+      if (token) {
+        await blacklistToken(token);
+      }
+
+      setIsAuthenticated(false);
+      setTokenState(null);
+      setUserInfoState(null);
+      clearAuthData();
+      router.push('/login');
+    } catch (error) {
+      console.error('Error during logout:', error);
+    }
+  }, [router, token]);
 
   return {
     isAuthenticated,
