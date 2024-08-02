@@ -38,6 +38,8 @@ const Dashboard = () => {
       setData(data);
     } catch (err) {
       setError(err);
+      // if error is caused by expired token
+      router.push('/login');
     }
   };
 
@@ -48,8 +50,6 @@ const Dashboard = () => {
   if (!data) {
     return <div>Loading data...</div>;
   }
-
-  console.log('JWT here - ', token);
 
   return (
     <div>

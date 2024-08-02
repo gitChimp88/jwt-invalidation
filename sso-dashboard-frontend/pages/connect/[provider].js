@@ -16,14 +16,17 @@ export default function ConnectProvider() {
       const requestURL = `http://localhost:1337/api/auth/${provider}/callback${search}`;
 
       try {
-        const response = await request(requestURL, { method: 'GET' });
+        const response = await request(requestURL, {
+          method: 'GET',
+          credentials: 'include',
+        });
         console.log('JWT - ', response.jwt);
         console.log('USER - ', response.user);
         setToken(response.jwt, true);
         setUserInfo(response.user, true);
         router.push('/');
       } catch (err) {
-        console.log(err.response.payload);
+        console.log(err.response);
         router.push('/login');
       }
     };
