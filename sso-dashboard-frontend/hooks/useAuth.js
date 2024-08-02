@@ -142,6 +142,14 @@ const useAuth = () => {
       // if (token) {
       //   await blacklistToken(token);
       // }
+      await fetch('http://localhost:1337/api/logout', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ token: token }),
+      });
 
       setIsAuthenticated(false);
       setTokenState(null);

@@ -1,5 +1,6 @@
 const utils = require("@strapi/utils");
 const { getService } = require("../users-permissions/utils");
+const redis = require("../../../config/redis");
 const jwt = require("jsonwebtoken");
 const _ = require("lodash");
 const { sanitize } = utils;
@@ -69,8 +70,12 @@ module.exports = (plugin) => {
         overwrite: true,
       });
 
+      const token = getService("jwt").issue({ id: user.id });
+
+      await redis.set(token, "valid", "EX", 300);
+
       return ctx.send({
-        jwt: getService("jwt").issue({ id: user.id }),
+        jwt: token,
         user: await sanitizeUser(user, ctx),
       });
     } catch (error) {
@@ -118,18 +123,36 @@ module.exports = (plugin) => {
         overwrite: true,
       });
 
+      const token = issueJWT({ id: obj.id }, { expiresIn: "5m" });
+
       ctx.send({
-        jwt: issueJWT({ id: obj.id }, { expiresIn: "5m" }),
+        jwt: token,
       });
     } catch (err) {
       return ctx.badRequest(err.toString());
     }
   };
 
+  plugin.controllers.auth["logout"] = async (ctx) => {
+    const { token } = ctx.request.body;
+    console.log("deleting token from redis");
+    await redis.del(token);
+  };
+
   plugin.routes["content-api"].routes.push({
     method: "POST",
     path: "/token/refresh",
     handler: "auth.refreshToken",
+    config: {
+      policies: [],
+      prefix: "",
+    },
+  });
+
+  plugin.routes["content-api"].routes.push({
+    method: "POST",
+    path: "/logout",
+    handler: "auth.logout",
     config: {
       policies: [],
       prefix: "",
