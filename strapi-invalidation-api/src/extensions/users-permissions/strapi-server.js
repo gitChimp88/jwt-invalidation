@@ -125,6 +125,8 @@ module.exports = (plugin) => {
 
       const token = issueJWT({ id: obj.id }, { expiresIn: "5m" });
 
+      console.log("REFRESH TOKEN - ", token);
+
       ctx.send({
         jwt: token,
       });
