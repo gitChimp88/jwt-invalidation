@@ -5,7 +5,7 @@ const Login = () => {
   return (
     <div>
       <main className={styles.main}>
-        <h1 className={styles.title}>SSO example</h1>
+        <h1 className={styles.title}>Provider example</h1>
         <SsoButton provider={'google'} />
       </main>
     </div>
