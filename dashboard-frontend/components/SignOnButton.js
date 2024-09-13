@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 
-function SsoButton({ provider }) {
+function SignOnButton({ provider }) {
   return (
     <a href={`http://localhost:1337/api/connect/${provider}`} className="link">
       <button className={`${provider}`}>
@@ -18,4 +18,4 @@ function SsoButton({ provider }) {
   );
 }
 
-export default SsoButton;
+export default SignOnButton;
